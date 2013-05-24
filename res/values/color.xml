@@ -4,5 +4,6 @@
     <color name="red_team">#DD0F30</color>
     <color name="blue_team">#30ACC4</color>
     <color name="green_team">#59A123</color>
+    <color name="transparent">#00000000</color>
     
 </resources>
