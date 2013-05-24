@@ -19,7 +19,8 @@ public class MatchesService extends WebService {
 		this.callback = callback;
 	}
 
-	public void startService() {
+	@Override
+	public void startService(Object object) {
 		String URLString = Constants.getURL() + Constants.WVW_PATH + Constants.SERVICE_MATCHES;
 		Log.i("MatchesService", URLString);
 		new AsyncWebTask().execute(URLString);

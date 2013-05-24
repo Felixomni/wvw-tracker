@@ -1,5 +1,6 @@
 package com.felixware.wvwtracker.models;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +29,19 @@ public class MatchDetails {
 		try {
 			matchDetails.id = jsonObject.getString("match_id");
 			matchDetails.totalScore = Score.getScoreFromJSON(jsonObject.getJSONArray("scores"));
-			// TODO maps
+			JSONArray mapsArray = jsonObject.getJSONArray("maps");
+			for (int i = 0; i < mapsArray.length(); i++) {
+				JSONObject map = mapsArray.getJSONObject(i);
+				if (map.getString("type").equals("RedHome")) {
+					matchDetails.redHome = Map.getMapFromJson(map);
+				} else if (map.getString("type").equals("BlueHome")) {
+					matchDetails.blueHome = Map.getMapFromJson(map);
+				} else if (map.getString("type").equals("GreenHome")) {
+					matchDetails.greenHome = Map.getMapFromJson(map);
+				} else if (map.getString("type").equals("Center")) {
+					matchDetails.center = Map.getMapFromJson(map);
+				}
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

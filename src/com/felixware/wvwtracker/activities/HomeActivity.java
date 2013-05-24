@@ -1,34 +1,26 @@
 package com.felixware.wvwtracker.activities;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ListView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.felixware.wvwtracker.R;
-import com.felixware.wvwtracker.adapters.MatchAdapter;
-import com.felixware.wvwtracker.models.Match;
-import com.felixware.wvwtracker.net.MatchesService;
-import com.felixware.wvwtracker.net.WebService.WebServiceCallback;
+import com.felixware.wvwtracker.fragments.MatchDetailsFragment;
+import com.felixware.wvwtracker.fragments.MatchListFragment;
 
 public class HomeActivity extends SherlockFragmentActivity {
 	private static final String TAG = "HomeActivity";
-	private ListView list;
-	private MatchAdapter adapter;
+
+	private MatchDetailsFragment matchDetailsFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_activity);
 
-		list = (ListView) findViewById(R.id.list);
-		MatchesService service = new MatchesService(this, mCallback);
-		service.startService();
+		addOrSwapFragment(new MatchListFragment());
 	}
 
 	@Override
@@ -37,33 +29,14 @@ public class HomeActivity extends SherlockFragmentActivity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	private WebServiceCallback mCallback = new WebServiceCallback() {
+	public void onMatchSelected(String matchId) {
+		matchDetailsFragment = MatchDetailsFragment.newInstance(matchId);
+		addOrSwapFragment(matchDetailsFragment);
+	}
 
-		@Override
-		public void onSuccess(Object response) {
-			List<Match> matchList = (List<Match>) response;
-			Collections.sort(matchList, new Comparator<Match>() {
-
-				@Override
-				public int compare(Match lhs, Match rhs) {
-					return rhs.id.compareTo(lhs.id) * -1;
-				}
-
-			});
-			for (int i = 0; i < matchList.size(); i++) {
-				Log.i(TAG, matchList.get(i).id);
-			}
-			adapter = new MatchAdapter(HomeActivity.this, 0, matchList);
-			list.setAdapter(adapter);
-
-		}
-
-		@Override
-		public void onError(Object response) {
-			// TODO Auto-generated method stub
-
-		}
-
-	};
+	public void addOrSwapFragment(Fragment fragment) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+	}
 
 }

@@ -2,6 +2,7 @@ package com.felixware.wvwtracker.adapters;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +11,19 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.felixware.wvwtracker.R;
+import com.felixware.wvwtracker.miscellaneous.WvwTrackerApplication;
 import com.felixware.wvwtracker.models.Match;
 
 public class MatchAdapter extends ArrayAdapter<Match> {
 	private Context context;
 	private List<Match> matchList;
+	private WvwTrackerApplication application;
 
 	public MatchAdapter(Context context, int id, List<Match> matchList) {
 		super(context, 0, matchList);
 		this.context = context;
 		this.matchList = matchList;
+		this.application = (WvwTrackerApplication) ((Activity) context).getApplication();
 	}
 
 	private static class ViewHolder {
@@ -47,10 +51,14 @@ public class MatchAdapter extends ArrayAdapter<Match> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		holder.redWorld.setText(Long.toString(matchList.get(pos).redWorldId));
-		holder.blueWorld.setText(Long.toString(matchList.get(pos).blueWorldId));
-		holder.greenWorld.setText(Long.toString(matchList.get(pos).greenWorldId));
+		holder.redWorld.setText(application.getWorldName(matchList.get(pos).redWorldId));
+		holder.blueWorld.setText(application.getWorldName(matchList.get(pos).blueWorldId));
+		holder.greenWorld.setText(application.getWorldName(matchList.get(pos).greenWorldId));
 
 		return convertView;
+	}
+
+	public String getMatchId(int pos) {
+		return matchList.get(pos).id;
 	}
 }

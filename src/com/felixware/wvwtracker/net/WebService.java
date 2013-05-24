@@ -60,6 +60,8 @@ public abstract class WebService {
 
 	};
 
+	public abstract void startService(Object object);
+
 	protected abstract void handleSuccess(String response);
 
 	protected abstract void handleError(int responseCode, String response);

@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">WvW Tracker</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="action_refresh">Refresh</string>
 
 </resources>
