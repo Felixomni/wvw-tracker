@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="red_team">#DD0F30</color>
+    <color name="blue_team">#30ACC4</color>
+    <color name="green_team">#59A123</color>
+    
+</resources>

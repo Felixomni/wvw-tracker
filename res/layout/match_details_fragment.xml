@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000022" >
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#00FF00"
+            android:background="@color/green_team"
             android:layout_margin="2dp"
             android:orientation="vertical" >
 
@@ -39,7 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#0000FF"
+            android:background="@color/blue_team"
             android:layout_margin="2dp"
             android:orientation="vertical" >
 
@@ -62,7 +62,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#FF0000"
+            android:background="@color/red_team"
             android:layout_margin="2dp"
             android:orientation="vertical" >
 
