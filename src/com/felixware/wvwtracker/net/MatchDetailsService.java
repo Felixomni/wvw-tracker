@@ -1,9 +1,13 @@
 package com.felixware.wvwtracker.net;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.util.Log;
 
 import com.felixware.wvwtracker.miscellaneous.Constants;
+import com.felixware.wvwtracker.models.MatchDetails;
 
 public class MatchDetailsService extends WebService {
 	public MatchDetailsService(Context context, WebServiceCallback callback) {
@@ -21,7 +25,15 @@ public class MatchDetailsService extends WebService {
 
 	@Override
 	protected void handleSuccess(String response) {
-		// TODO Auto-generated method stub
+		MatchDetails details = new MatchDetails();
+		JSONObject jsonObject = null;
+		try {
+			jsonObject = new JSONObject(response);
+			details = MatchDetails.getMatchDetailsFromJson(jsonObject);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		callback.onSuccess(details);
 
 	}
 

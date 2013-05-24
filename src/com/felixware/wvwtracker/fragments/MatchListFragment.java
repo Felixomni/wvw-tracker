@@ -26,17 +26,13 @@ public class MatchListFragment extends MatchFragment {
 	private HomeActivity activity;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		new WorldNamesService(getActivity(), namesCallback).startService(null);
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.match_list_fragment, container, false);
 
 		list = (ListView) view.findViewById(R.id.list);
 		activity = (HomeActivity) getActivity();
+
+		new WorldNamesService(getActivity(), namesCallback).startService(null);
 
 		return view;
 	}
@@ -61,6 +57,7 @@ public class MatchListFragment extends MatchFragment {
 
 		@Override
 		public void onSuccess(Object response) {
+			@SuppressWarnings("unchecked")
 			List<Match> matchList = (List<Match>) response;
 			Collections.sort(matchList, new Comparator<Match>() {
 
@@ -76,9 +73,9 @@ public class MatchListFragment extends MatchFragment {
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-					String matchId = adapter.getMatchId(pos);
-					if (matchId != null) {
-						activity.onMatchSelected(matchId);
+					Match match = adapter.getMatch(pos);
+					if (match != null) {
+						activity.onMatchSelected(match);
 					}
 
 				}
@@ -97,8 +94,7 @@ public class MatchListFragment extends MatchFragment {
 
 	@Override
 	public void refresh() {
-		// TODO Auto-generated method stub
-
+		new MatchesService(getActivity(), matchesCallback).startService(null);
 	}
 
 }

@@ -58,7 +58,7 @@ public class MatchAdapter extends ArrayAdapter<Match> {
 		return convertView;
 	}
 
-	public String getMatchId(int pos) {
-		return matchList.get(pos).id;
+	public Match getMatch(int pos) {
+		return matchList.get(pos);
 	}
 }
