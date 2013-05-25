@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:score="http://schemas.android.com/apk/res/com.felixware.wvwtracker"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+     >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
     <LinearLayout
-        android:id="@+id/totalsView"
+        android:id="@+id/totalsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -37,13 +42,43 @@
             android:layout_weight="1"
             score:scoreBackground="@color/red_team" />
     </LinearLayout>
-    
+    <LinearLayout
+        android:id="@+id/objectivesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/totalsLayout"
+        android:orientation="vertical">
+
     <com.felixware.wvwtracker.views.ObjectivesView
         android:id="@+id/greenObjectives"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/totalsView"
-        android:padding="5dp"
+        android:layout_weight="1"
+        android:padding="5dp" />
+
+    <com.felixware.wvwtracker.views.ObjectivesView
+        android:id="@+id/blueObjectives"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="5dp" />
+
+    <com.felixware.wvwtracker.views.ObjectivesView
+        android:id="@+id/redObjectives"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="5dp" />
+    
+    </LinearLayout>
+    
+    <FrameLayout
+        android:id="@+id/chartContainer"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/objectivesLayout"
         />
     
-</RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>

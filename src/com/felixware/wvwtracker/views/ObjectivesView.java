@@ -10,7 +10,6 @@ import com.felixware.wvwtracker.R;
 
 public class ObjectivesView extends RelativeLayout {
 	private TextView campsText, towersText, keepsText, castlesText, incomeText;
-	private Context context;
 
 	public ObjectivesView(Context context) {
 		this(context, null);
@@ -32,10 +31,10 @@ public class ObjectivesView extends RelativeLayout {
 	}
 
 	public void setText(int camps, int towers, int keeps, int castles, int income) {
-		campsText.setText(Integer.toString(camps));
-		towersText.setText(Integer.toString(towers));
-		keepsText.setText(Integer.toString(keeps));
-		castlesText.setText(Integer.toString(castles));
+		campsText.setText("C x" + Integer.toString(camps));
+		towersText.setText("T x" + Integer.toString(towers));
+		keepsText.setText("K x" + Integer.toString(keeps));
+		castlesText.setText("S x" + Integer.toString(castles));
 		incomeText.setText("+" + Integer.toString(income));
 	}
 

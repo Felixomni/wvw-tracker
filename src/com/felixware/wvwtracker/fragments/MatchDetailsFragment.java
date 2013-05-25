@@ -1,10 +1,18 @@
 package com.felixware.wvwtracker.fragments;
 
+import org.achartengine.ChartFactory;
+import org.achartengine.GraphicalView;
+import org.achartengine.model.CategorySeries;
+import org.achartengine.renderer.DefaultRenderer;
+import org.achartengine.renderer.SimpleSeriesRenderer;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 
 import com.felixware.wvwtracker.R;
 import com.felixware.wvwtracker.miscellaneous.Constants;
@@ -39,6 +47,10 @@ public class MatchDetailsFragment extends MatchFragment {
 	private WvwTrackerApplication application;
 	private int redIncome, blueIncome, greenIncome;
 	private int ownedObjects[][] = new int[3][4];
+	private FrameLayout chartContainer;
+	private GraphicalView chartView;
+	private CategorySeries mSeries = new CategorySeries("");
+	private DefaultRenderer mRenderer = new DefaultRenderer();
 
 	public static MatchDetailsFragment newInstance(Match match) {
 		MatchDetailsFragment fragment = new MatchDetailsFragment();
@@ -63,7 +75,20 @@ public class MatchDetailsFragment extends MatchFragment {
 
 		new MatchDetailsService(getActivity(), detailsCallback).startService(match.id);
 
+		configureRenderer();
+
 		return view;
+	}
+
+	private void configureRenderer() {
+		mRenderer.setZoomButtonsVisible(false);
+		mRenderer.setDisplayValues(false);
+		mRenderer.setShowLegend(false);
+		mRenderer.setZoomEnabled(false);
+		mRenderer.setInScroll(true);
+		mRenderer.setAntialiasing(true);
+		mRenderer.setShowLabels(false);
+		mRenderer.setPanEnabled(false);
 	}
 
 	private void bindViews(View view) {
@@ -72,6 +97,10 @@ public class MatchDetailsFragment extends MatchFragment {
 		blueTotalView = (TotalScoreView) view.findViewById(R.id.blueTotalView);
 
 		greenObjectivesView = (ObjectivesView) view.findViewById(R.id.greenObjectives);
+		blueObjectivesView = (ObjectivesView) view.findViewById(R.id.blueObjectives);
+		redObjectivesView = (ObjectivesView) view.findViewById(R.id.redObjectives);
+
+		chartContainer = (FrameLayout) view.findViewById(R.id.chartContainer);
 
 	}
 
@@ -152,9 +181,32 @@ public class MatchDetailsFragment extends MatchFragment {
 			addScoreToIncome(objective);
 		}
 
-		Log.i(TAG, "red income is " + Integer.toString(redIncome));
-		Log.i(TAG, "blue income is " + Integer.toString(blueIncome));
-		Log.i(TAG, "green income is " + Integer.toString(greenIncome));
+		greenObjectivesView.setText(ownedObjects[GREEN][CAMP], ownedObjects[GREEN][TOWER], ownedObjects[GREEN][KEEP], ownedObjects[GREEN][CASTLE], greenIncome);
+		blueObjectivesView.setText(ownedObjects[BLUE][CAMP], ownedObjects[BLUE][TOWER], ownedObjects[BLUE][KEEP], ownedObjects[BLUE][CASTLE], blueIncome);
+		redObjectivesView.setText(ownedObjects[RED][CAMP], ownedObjects[RED][TOWER], ownedObjects[RED][KEEP], ownedObjects[RED][CASTLE], redIncome);
+
+		double values[] = { greenIncome, blueIncome, redIncome };
+		addToSeries(values);
+
+		mRenderer.addSeriesRenderer(getRenderer(R.color.green_team));
+		mRenderer.addSeriesRenderer(getRenderer(R.color.blue_team));
+		mRenderer.addSeriesRenderer(getRenderer(R.color.red_team));
+
+		chartView = ChartFactory.getPieChartView(getActivity(), mSeries, mRenderer);
+		chartContainer.addView(chartView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
+	}
+
+	private SimpleSeriesRenderer getRenderer(int color) {
+		SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
+		renderer.setColor(getResources().getColor(color));
+		return renderer;
+	}
+
+	private void addToSeries(double values[]) {
+		for (double value : values) {
+			mSeries.add(value);
+		}
 	}
 
 	public void addScoreToIncome(Objective objective) {
@@ -164,12 +216,16 @@ public class MatchDetailsFragment extends MatchFragment {
 			addObjectiveToTotal(BLUE, info.type);
 		} else if (objective.owner.equals("Red")) {
 			redIncome += info.score;
+			addObjectiveToTotal(RED, info.type);
 		} else if (objective.owner.equals("Green")) {
 			greenIncome += info.score;
+			addObjectiveToTotal(GREEN, info.type);
 		}
 	}
 
 	public void addObjectiveToTotal(int team, String type) {
+		Log.i(TAG, "team is " + Integer.toString(team));
+		Log.i(TAG, "type is " + type);
 		if (type.equals("camp")) {
 			ownedObjects[team][CAMP] += 1;
 		} else if (type.equals("tower")) {

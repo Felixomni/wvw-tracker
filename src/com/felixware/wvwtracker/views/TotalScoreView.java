@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.felixware.wvwtracker.R;
 
 public class TotalScoreView extends RelativeLayout {
-	private Context context;
 	private TextView nameText, scoreText;
 	private View scoreBar;
 
@@ -25,8 +24,6 @@ public class TotalScoreView extends RelativeLayout {
 
 	public TotalScoreView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-
-		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.total_score_view, this);
 
 		nameText = (TextView) findViewById(R.id.scoreName);
